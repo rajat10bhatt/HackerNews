@@ -19,13 +19,14 @@ class TopStoriesTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func configureWithStory(story: Story) {
-        let time = minutesToHour(timeInseconds: story.time!)
-        self.storiesTitleLabel.text = story.title
-        self.detailsLabel.text = "\(story.by)\n\(story.score) points | by \(story.by)| \(time) hours | \(story.kids?.count)comments"
-//        countryNameLabel.text = chocolate.countryName
-//        emojiLabel.text = "🍫" + chocolate.countryFlagEmoji
-//        priceLabel.text = CurrencyFormatter.dollarsFormatter.rw_string(from: chocolate.priceInDollars)
-
-
+    func configureWithStory(story: Int) {
+        self.storiesTitleLabel.text = String(describing: story)
+//        let time = secondsToHourInt(timeInSeconds: story.time!)
+//        self.storiesTitleLabel.text = story.title
+//        self.detailsLabel.text = "\(story.by)\n\(story.score) points | by \(story.by)| \(time) hours | \(story.kids?.count)comments"
+    }
+    
+    func secondsToHourInt(timeInSeconds: Int) -> Int {
+        return Int(timeInSeconds/(60*60))
+    }
 }

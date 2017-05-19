@@ -12,6 +12,7 @@ import ObjectMapper
 
 class Story : Mappable {
     
+    static var topStories: [Story] = []
     var by : String?
     var descendants : Int?
     var id : Int?

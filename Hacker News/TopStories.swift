@@ -9,5 +9,5 @@
 import Foundation
 
 class TopStories {
-    static var topStories = [Int]()
+    static var topStoriesID: [Int] = []
 }
