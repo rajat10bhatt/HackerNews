@@ -10,30 +10,33 @@ import Foundation
 import Alamofire
 import RxSwift
 import RxAlamofire
+import ObjectMapper
 
 class StoryController{
-    
-    static let storySaredInstance = StoryController()
-    
     let disposeBag = DisposeBag()
-    let topStories = Observable.from(Story.topStories)
-    func getTopStories(itemID: Int) {
-        let sourceStringURL = hackerNewsUrls.baseURL + hackerNewsUrls.getTopStories
-        RxAlamofire.requestJSON(.get, sourceStringURL)
-            .debug()
-            .subscribe(onNext: { (r, json) in
-                if let dict = json as? Story {
-                    //                    let valDict = dict["rates"] as! Dictionary<String, AnyObject>
-                    //                    if let conversionRate = valDict["USD"] as? Float {
-                    //                        self?.toTextField.text = formatter
-                    //                            .string(from: NSNumber(value: conversionRate * fromValue))
-                    //                    }
-                    Story.topStories.append(dict)
-                    print(dict)
-                }
-            }, onError: { (error) in
-                print(error as NSError)
-            })
-            .addDisposableTo(disposeBag)
+    func getStory(itemID: Int) -> Observable<AnyObject?> {
+        let sourceStringURL = hackerNewsUrls.baseURL + hackerNewsUrls.getHackerNewsItem + String(describing: itemID) + hackerNewsUrls.getHackerNewsItemAddOn
+        return Observable.create{ observer in
+            let request = Alamofire.request(sourceStringURL).validate()
+                .responseJSON(completionHandler:  { response in
+//                    if ((response.error) != nil) {
+//                        observer.on(.error(response.error!))
+//                    } else {
+//                        observer.on(.next(response as AnyObject))
+//                        observer.on(.completed)
+//                    }
+                    switch response.result {
+                    case .success(let json):
+                        let story = Mapper<Story>().map(JSONObject: json)
+                        observer.on(.next(story as AnyObject))
+                        observer.on(.completed)
+                    case .failure(let error):
+                        observer.on(.error(error))
+                    }
+                });
+            return Disposables.create {
+                request.cancel()
+            }
+        }
     }
 }

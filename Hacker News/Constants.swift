@@ -11,5 +11,6 @@ import Foundation
 struct hackerNewsUrls {
     public static let baseURL = "https://hacker-news.firebaseio.com"
     public static let getTopStories = "/v0/topstories.json"
-    public static let getHackerNewsItem = "/v0/item/{itemid}.json"
+    public static let getHackerNewsItem = "/v0/item/"
+    public static let getHackerNewsItemAddOn = ".json"
 }

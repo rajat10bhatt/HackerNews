@@ -11,24 +11,23 @@ import RxCocoa
 import RxSwift
 
 class TopStoriesViewController: UIViewController {
-
-    @IBOutlet weak var topStoriesTableView: UITableView!
+    
+    @IBOutlet private var topStoriesTableView: UITableView!
     
     let disposeBag = DisposeBag()
     let controller = TopStoriesController()
+    let storyController = StoryController()
+    let stories: Variable<[Story]> = Variable([])
+    var topStoryIDs = [Int]()
+    var storyObservable: Observable<[Story]>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        //        self.topStoriesTableView.dataSource = self
+        //        self.topStoriesTableView.delegate = self
         getTopStories()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-        
-    }
-
+    
     //MARK:- Rx Setup
     func getTopStories() {
         let operationQueue = OperationQueue()
@@ -50,7 +49,7 @@ class TopStoriesViewController: UIViewController {
                 onNext: { data in
                     do {
                         let post = try JSONSerialization.jsonObject(with: (data as! NSData) as Data, options: []) as! NSArray as! [Int]
-                        print(post)
+                        self.topStoryIDs = post
                     } catch  {
                         print(NSString(data: (data as! NSData) as Data, encoding: String.Encoding.utf8.rawValue) ?? "Hello")
                         return
@@ -61,6 +60,7 @@ class TopStoriesViewController: UIViewController {
             },
                 onCompleted: {
                     print("Completed")
+                    self.getStoryData()
             },
                 onDisposed: {
                     print("Disposed")
@@ -68,36 +68,54 @@ class TopStoriesViewController: UIViewController {
             )
             .addDisposableTo(disposeBag)
     }
-//    func setupCellConfiguration() {
-//        //1
-//        TopStoriesController.topStoriesSaredInstance.topStories
-//            .bindTo(self.topStoriesTableView
-//                .rx //2
-//                .items(cellIdentifier: TopStoriesTableViewCell.identifier,
-//                       cellType: TopStoriesTableViewCell.self)) { // 3
-//                        row, story, cell in
-//                        cell.configureWithStory(story: story) //4
-//            }
-//            .addDisposableTo(disposeBag)//5
-//        TopStoriesController.topStoriesSaredInstance.topStories.asObservable().subscribe(onNext: { storyId in
-//            print(storyId)
-//        }).addDisposableTo(disposeBag)
-//    }
     
-//    private func setupCellTapHandling() {
-//        topStoriesTableView
-//            .rx
-//            .modelSelected(Story.self) //1
-//            .subscribe(onNext: { //2
-//                chocolate in
-//                ShoppingCart.sharedCart.chocolates.value.append(chocolate) //3
-//                
-//                if let selectedRowIndexPath = self.tableView.indexPathForSelectedRow {
-//                    self.tableView.deselectRow(at: selectedRowIndexPath, animated: true)
-//                } //4
-//            })
-//            .addDisposableTo(disposeBag) //5
-//    }
-
+    func getStoryData() {
+        var count = 0
+        let _ = self.topStoryIDs.map{ id in
+            return self.storyController.getStory(itemID: id).subscribe(
+                onNext: { story in
+                    let story1 = story as! Story
+                    //print(story1.by ?? "Story Id")
+                    self.stories.value.append(story1)
+                    count += 1
+            }, onCompleted: {
+                //print("completed")
+                if count == self.topStoryIDs.count {
+                    DispatchQueue.main.async {
+                        self.setupTableView()
+                        self.setupCellTapHandling()
+                        //self.topStoriesTableView.reloadData()
+                    }
+                }
+            }).addDisposableTo(disposeBag)
+        }
+    }
+    
+    func setupTableView() {
+        storyObservable = Observable.just(stories.value)
+        storyObservable
+            .bindTo(topStoriesTableView
+                .rx
+                .items(cellIdentifier: TopStoriesTableViewCell.identifier, cellType: TopStoriesTableViewCell.self)){
+            row, story, cell in
+            cell.configureWithStory(story: story)
+            }.addDisposableTo(disposeBag)
+        
+    }
+    
+    private func setupCellTapHandling() {
+        topStoriesTableView
+            .rx
+            .modelSelected(Story.self) //1
+            .subscribe(onNext: { //2
+                story in
+                //ShoppingCart.sharedCart.chocolates.value.append(chocolate) //3
+                print(story.by ?? "Story.by")
+                if let selectedRowIndexPath = self.topStoriesTableView.indexPathForSelectedRow {
+                    self.topStoriesTableView.deselectRow(at: selectedRowIndexPath, animated: true)
+                } //4
+            })
+            .addDisposableTo(disposeBag) //5
+    }
 }
 
