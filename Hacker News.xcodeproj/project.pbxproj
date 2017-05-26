@@ -7,13 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		044A7E2E1ED7EEE200F9158F /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044A7E2D1ED7EEE200F9158F /* CommentsViewController.swift */; };
+		044A7E301ED7F91F00F9158F /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044A7E2F1ED7F91F00F9158F /* CommentTableViewCell.swift */; };
 		0E43C8920F4B7338DC4B6E58 /* Pods_Hacker_NewsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336FB4AA2128360D25180A92 /* Pods_Hacker_NewsUITests.framework */; };
 		2C9F26A0FF19224AC8FD72FC /* Pods_Hacker_NewsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C490D082D9D519155F688315 /* Pods_Hacker_NewsTests.framework */; };
 		B602A52D1ECEB39900327318 /* StoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B602A52C1ECEB39900327318 /* StoryController.swift */; };
 		B6222C001ECD7BEE001F9DA1 /* SegueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6222BFF1ECD7BED001F9DA1 /* SegueHandler.swift */; };
 		B6222C031ECD8929001F9DA1 /* TopStoriesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6222C021ECD8929001F9DA1 /* TopStoriesController.swift */; };
 		B6222C051ECDA0EA001F9DA1 /* TopStories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6222C041ECDA0E9001F9DA1 /* TopStories.swift */; };
-		B6222C071ECDA5AF001F9DA1 /* SecondsToHour.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6222C061ECDA5AE001F9DA1 /* SecondsToHour.swift */; };
 		B6625D871ECAD162007BF864 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6625D861ECAD162007BF864 /* Constants.swift */; };
 		B6625D891ECAD270007BF864 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6625D881ECAD270007BF864 /* Protocols.swift */; };
 		B6625D8B1ECAD2CD007BF864 /* TopStoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6625D8A1ECAD2CD007BF864 /* TopStoriesTableViewCell.swift */; };
@@ -48,6 +49,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		044A7E2D1ED7EEE200F9158F /* CommentsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		044A7E2F1ED7F91F00F9158F /* CommentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		1E4FE0E501ED399DBC1E7A01 /* Pods-Hacker NewsUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hacker NewsUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Hacker NewsUITests/Pods-Hacker NewsUITests.release.xcconfig"; sourceTree = "<group>"; };
 		23950D6D96601D168682234A /* Pods-Hacker NewsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hacker NewsUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Hacker NewsUITests/Pods-Hacker NewsUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		336FB4AA2128360D25180A92 /* Pods_Hacker_NewsUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hacker_NewsUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -57,7 +60,6 @@
 		B6222BFF1ECD7BED001F9DA1 /* SegueHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegueHandler.swift; sourceTree = "<group>"; };
 		B6222C021ECD8929001F9DA1 /* TopStoriesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopStoriesController.swift; sourceTree = "<group>"; };
 		B6222C041ECDA0E9001F9DA1 /* TopStories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopStories.swift; sourceTree = "<group>"; };
-		B6222C061ECDA5AE001F9DA1 /* SecondsToHour.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondsToHour.swift; sourceTree = "<group>"; };
 		B6625D861ECAD162007BF864 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B6625D881ECAD270007BF864 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		B6625D8A1ECAD2CD007BF864 /* TopStoriesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopStoriesTableViewCell.swift; sourceTree = "<group>"; };
@@ -204,7 +206,6 @@
 		B681A23A1ECAB8D10000CB76 /* Extention */ = {
 			isa = PBXGroup;
 			children = (
-				B6222C061ECDA5AE001F9DA1 /* SecondsToHour.swift */,
 			);
 			name = Extention;
 			sourceTree = "<group>";
@@ -232,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				B6625D8A1ECAD2CD007BF864 /* TopStoriesTableViewCell.swift */,
+				044A7E2F1ED7F91F00F9158F /* CommentTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -240,6 +242,7 @@
 			isa = PBXGroup;
 			children = (
 				B681A20B1ECAB41A0000CB76 /* TopStoriesViewController.swift */,
+				044A7E2D1ED7EEE200F9158F /* CommentsViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -539,6 +542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6625D8D1ECAD598007BF864 /* Story.swift in Sources */,
+				044A7E2E1ED7EEE200F9158F /* CommentsViewController.swift in Sources */,
 				B6625D891ECAD270007BF864 /* Protocols.swift in Sources */,
 				B6625D8B1ECAD2CD007BF864 /* TopStoriesTableViewCell.swift in Sources */,
 				B602A52D1ECEB39900327318 /* StoryController.swift in Sources */,
@@ -548,8 +552,8 @@
 				B681A2121ECAB41A0000CB76 /* Hacker_News.xcdatamodeld in Sources */,
 				B681A20C1ECAB41A0000CB76 /* TopStoriesViewController.swift in Sources */,
 				B681A20A1ECAB41A0000CB76 /* AppDelegate.swift in Sources */,
+				044A7E301ED7F91F00F9158F /* CommentTableViewCell.swift in Sources */,
 				B6625D871ECAD162007BF864 /* Constants.swift in Sources */,
-				B6222C071ECDA5AF001F9DA1 /* SecondsToHour.swift in Sources */,
 				B6222C031ECD8929001F9DA1 /* TopStoriesController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

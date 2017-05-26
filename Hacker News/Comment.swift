@@ -17,7 +17,7 @@ import Foundation
 import ObjectMapper
 
 
-class RootClass : Mappable{
+class Comment : Mappable{
     
     var by : String?
     var id : Int?

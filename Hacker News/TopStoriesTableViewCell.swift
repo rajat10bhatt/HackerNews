@@ -24,8 +24,8 @@ class TopStoriesTableViewCell: UITableViewCell {
         let time = secondsToHourInt(timeInSeconds: (story.time!))
         self.storiesTitleLabel.text = story.title
         //self.detailsLabel.text = "Hello"
-        if let decendants = story.descendants {
-            self.detailsLabel.text = "\(String(describing: (story.by)!))\n\(String(describing: (story.score)!)) points | by \(String(describing: (story.by)!))| \(time) hours | \(String(describing: decendants))comments"
+        if let kids = story.kids {
+            self.detailsLabel.text = "\(String(describing: (story.by)!))\n\(String(describing: (story.score)!)) points | by \(String(describing: (story.by)!))| \(time) hours | \(String(describing: kids.count))comments"
         } else {
             self.detailsLabel.text = "\(String(describing: (story.by)!))\n\(String(describing: (story.score)!)) points | by \(String(describing: (story.by)!))| \(time) hours | \(String(describing: 0)) comments"
         }

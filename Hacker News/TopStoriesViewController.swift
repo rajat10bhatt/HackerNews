@@ -26,6 +26,7 @@ class TopStoriesViewController: UIViewController {
         //        self.topStoriesTableView.dataSource = self
         //        self.topStoriesTableView.delegate = self
         getTopStories()
+        self.setupCellTapHandling()
     }
     
     //MARK:- Rx Setup
@@ -83,7 +84,6 @@ class TopStoriesViewController: UIViewController {
                 if count == self.topStoryIDs.count {
                     DispatchQueue.main.async {
                         self.setupTableView()
-                        self.setupCellTapHandling()
                         //self.topStoriesTableView.reloadData()
                     }
                 }
@@ -109,13 +109,25 @@ class TopStoriesViewController: UIViewController {
             .modelSelected(Story.self) //1
             .subscribe(onNext: { //2
                 story in
-                //ShoppingCart.sharedCart.chocolates.value.append(chocolate) //3
-                print(story.by ?? "Story.by")
+                self.performSegue(withIdentifier: SegueIdentifier.toComments.rawValue, sender: story)
                 if let selectedRowIndexPath = self.topStoriesTableView.indexPathForSelectedRow {
                     self.topStoriesTableView.deselectRow(at: selectedRowIndexPath, animated: true)
                 } //4
             })
             .addDisposableTo(disposeBag) //5
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifier.toComments.rawValue {
+            if let story = sender as? Story {
+                let destination = segue.destination as! CommentsViewController
+                destination.story = story
+            }
+        }
+    }
 }
-
+extension TopStoriesViewController: SegueHandler {
+    enum SegueIdentifier: String {
+        case toComments
+    }
+}
