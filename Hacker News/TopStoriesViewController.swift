@@ -9,6 +9,16 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import RxPager
+
+// MARK: Helper
+
+private let startLoadingOffset: CGFloat = 20.0
+private func isNearTheBottomEdge(_ contentOffset: CGPoint, _ tableView: UITableView) -> Bool {
+    return contentOffset.y +
+        tableView.frame.size.height +
+        startLoadingOffset > tableView.contentSize.height
+}
 
 class TopStoriesViewController: UIViewController {
     
@@ -17,16 +27,59 @@ class TopStoriesViewController: UIViewController {
     let disposeBag = DisposeBag()
     let controller = TopStoriesController()
     let storyController = StoryController()
+    var dummyStories = [Story]()
     let stories: Variable<[Story]> = Variable([])
     var topStoryIDs = [Int]()
+    var topSoriesIDsForPaging = [Int]()
     var storyObservable: Observable<[Story]>!
+    var page = 0
+    let storiesPerPage = 10
+    var startIndex = 0
+    var endIndex = 0
+    var tableViewDidReachBottom = true
+    var tableViewDidSetup = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        self.topStoriesTableView.dataSource = self
-        //        self.topStoriesTableView.delegate = self
-        getTopStories()
+        self.getTopStories()
         self.setupCellTapHandling()
+        
+    }
+    
+    func enumeratedmap() {
+        if self.tableViewDidReachBottom {
+            self.startIndex = self.page * self.storiesPerPage
+            self.endIndex = self.startIndex + self.storiesPerPage
+            self.topSoriesIDsForPaging.removeAll()
+            for (index, id) in self.topStoryIDs.enumerated() {
+                if index == endIndex {
+                    break
+                }
+                if index >= startIndex {
+                    self.topSoriesIDsForPaging.append(id)
+                }
+            }
+            page += 1
+            print(self.topSoriesIDsForPaging)
+            //self.stories.value.removeAll()
+            self.getStoryData()
+            self.tableViewDidReachBottom = false
+        }
+    }
+    
+    //MARK: TableView Scroll delegate
+    func detectTableViewScroll() {
+        // dismiss keyboard on scroll
+        self.topStoriesTableView.rx.contentOffset
+            .subscribe { offset in
+                //print("Offset:- \(String(describing: offset.element?.y))")
+                //print("TableView ContentSize:- \(self.topStoriesTableView.contentSize.height)")
+                if ((offset.element?.y)! + self.topStoriesTableView.frame.size.height +
+                    startLoadingOffset) > self.topStoriesTableView.contentSize.height {
+                    self.enumeratedmap()
+                }
+            }
+            .addDisposableTo(disposeBag)
     }
     
     //MARK:- Rx Setup
@@ -61,7 +114,9 @@ class TopStoriesViewController: UIViewController {
             },
                 onCompleted: {
                     print("Completed")
-                    self.getStoryData()
+                    //self.getStoryData()
+                    //self.enumeratedmap()
+                    self.detectTableViewScroll()
             },
                 onDisposed: {
                     print("Disposed")
@@ -72,19 +127,20 @@ class TopStoriesViewController: UIViewController {
     
     func getStoryData() {
         var count = 0
-        let _ = self.topStoryIDs.map{ id in
+        let _ = self.topSoriesIDsForPaging.map{ id in
             return self.storyController.getStory(itemID: id).subscribe(
                 onNext: { story in
                     let story1 = story as! Story
                     //print(story1.by ?? "Story Id")
-                    self.stories.value.append(story1)
+                    self.stories.value                       .append(story1)
                     count += 1
             }, onCompleted: {
                 //print("completed")
-                if count == self.topStoryIDs.count {
+                if count == self.topSoriesIDsForPaging.count {
                     DispatchQueue.main.async {
+                        //self.stories.value = self.dummyStories
                         self.setupTableView()
-                        //self.topStoriesTableView.reloadData()
+                        self.tableViewDidReachBottom = true
                     }
                 }
             }).addDisposableTo(disposeBag)
@@ -92,15 +148,14 @@ class TopStoriesViewController: UIViewController {
     }
     
     func setupTableView() {
-        storyObservable = Observable.just(stories.value)
-        storyObservable
+        self.topStoriesTableView.dataSource = nil
+        self.stories.asObservable()
             .bindTo(topStoriesTableView
                 .rx
                 .items(cellIdentifier: TopStoriesTableViewCell.identifier, cellType: TopStoriesTableViewCell.self)){
             row, story, cell in
             cell.configureWithStory(story: story)
             }.addDisposableTo(disposeBag)
-        
     }
     
     private func setupCellTapHandling() {
@@ -109,6 +164,7 @@ class TopStoriesViewController: UIViewController {
             .modelSelected(Story.self) //1
             .subscribe(onNext: { //2
                 story in
+                print(story.id)
                 self.performSegue(withIdentifier: SegueIdentifier.toComments.rawValue, sender: story)
                 if let selectedRowIndexPath = self.topStoriesTableView.indexPathForSelectedRow {
                     self.topStoriesTableView.deselectRow(at: selectedRowIndexPath, animated: true)

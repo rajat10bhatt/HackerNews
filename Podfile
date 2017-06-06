@@ -11,7 +11,7 @@ target 'Hacker News' do
   pod 'RxAlamofire'
   pod 'Moya-ObjectMapper'
   pod 'Moya'
-  pod 'ReactiveCocoa', '~> 5.0.0'
+  pod "RxPager"
 
   target 'Hacker NewsTests' do
     inherit! :search_paths
